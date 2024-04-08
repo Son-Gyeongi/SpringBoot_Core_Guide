@@ -4,6 +4,8 @@ import com.springboot.jpa.data.dto.ChangeProductNameDto;
 import com.springboot.jpa.data.dto.ProductDto;
 import com.springboot.jpa.data.dto.ProductResponseDto;
 import com.springboot.jpa.service.ProductService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,10 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * http://localhost:8080/product?number=1
+     */
+    @ApiOperation(value = "Product 조회")
     @GetMapping()
     public ResponseEntity<ProductResponseDto> getProduct(Long number) {
         ProductResponseDto productResponseDto = productService.getProduct(number);
@@ -27,6 +33,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDto);
     }
 
+    @ApiOperation(value = "Product 생성")
     @PostMapping()
     public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductDto productDto) {
         ProductResponseDto productResponseDto = productService.saveProduct(productDto);
@@ -34,15 +41,17 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDto);
     }
 
+    @ApiOperation(value = "Product 이름 수정")
     @PutMapping()
     public ResponseEntity<ProductResponseDto> changeProductName(
-            @RequestBody ChangeProductNameDto changeProductNameDto
+            @ApiParam(value = "변경될 제품 번호 및 수정할 이름") @RequestBody ChangeProductNameDto changeProductNameDto
     ) throws Exception {
         ProductResponseDto productResponseDto = productService.changeProductName(changeProductNameDto.getNumber(), changeProductNameDto.getName());
 
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDto);
     }
 
+    @ApiOperation(value = "Product 삭제")
     @DeleteMapping
     public ResponseEntity<String> deleteProduct(Long number) throws Exception {
         productService.deleteProduct(number);

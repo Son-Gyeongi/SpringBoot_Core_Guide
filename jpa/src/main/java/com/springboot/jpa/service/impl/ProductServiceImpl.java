@@ -34,10 +34,10 @@ public class ProductServiceImpl implements ProductService {
         Product product = productDAO.selectProduct(number);
 
         ProductResponseDto productResponseDto = new ProductResponseDto();
-        productResponseDto.setNumber(productResponseDto.getNumber());
-        productResponseDto.setName(productResponseDto.getName());
-        productResponseDto.setPrice(productResponseDto.getPrice());
-        productResponseDto.setStock(productResponseDto.getStock());
+        productResponseDto.setNumber(product.getNumber());
+        productResponseDto.setName(product.getName());
+        productResponseDto.setPrice(product.getPrice());
+        productResponseDto.setStock(product.getStock());
 
         return productResponseDto;
     }
@@ -49,9 +49,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto saveProduct(ProductDto productDto) {
         // DTO 객체를 통해 엔티티 객체를 생성해서 초기화
         Product product = new Product();
-        product.setName(product.getName());
+        product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
-        product.setStock(product.getStock());
+        product.setStock(productDto.getStock());
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
 

@@ -12,6 +12,9 @@ public class ProductDto {
         this.stock = stock;
     }
 
+    public ProductDto() {
+    }
+
     public String getName() {
         return name;
     }
