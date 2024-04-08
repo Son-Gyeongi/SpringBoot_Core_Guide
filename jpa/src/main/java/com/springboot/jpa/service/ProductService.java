@@ -1,4 +1,4 @@
-package com.springboot.service;
+package com.springboot.jpa.service;
 
 import com.springboot.jpa.data.dto.ProductDto;
 import com.springboot.jpa.data.dto.ProductResponseDto;
