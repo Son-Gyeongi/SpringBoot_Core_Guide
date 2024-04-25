@@ -3,7 +3,6 @@ package com.springboot.test.controller;
 import com.google.gson.Gson;
 import com.springboot.test.data.dto.ProductDto;
 import com.springboot.test.data.dto.ProductResponseDto;
-import com.springboot.test.data.entity.Product;
 import com.springboot.test.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,6 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/*
+슬라이스 테스트
+- 단위 테스트와 통합 테스트의 중간 개념
+- 레이어드 아키텍처를 기준으로 각 레이어별로 나누어 테스트를 진행한다는 의미
+- @WebMvcTest 사용
+ */
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
