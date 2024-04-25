@@ -40,6 +40,10 @@ dependencies {
     // gson - 구글에서 개발한 JSON 파싱 라이브러리
     // 자바 객체를 JSON 문자열로 변환하거나 JSON 문자열을 자바 객체로 변환하는 역할
     implementation 'com.google.code.gson:gson:2.7'
+
+    // 테스트 데이터베이스로 H2 DB 사용
+    testImplementation 'com.h2database:h2'
+//    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
