@@ -1,6 +1,11 @@
 package com.springboot.advanced_jpa.data.repository;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.advanced_jpa.data.entity.Product;
+import com.springboot.advanced_jpa.data.entity.QProduct;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 쿼리 메서드 이름에 키워드 넣지 않고
@@ -69,5 +77,138 @@ class ProductRepositoryTest {
                 Sort.Order.asc("price"),
                 Sort.Order.desc("stock")
         );
+    }
+
+
+    /**
+     * 기본적인 QueryDSL 사용하기
+     */
+    @PersistenceContext
+    EntityManager entityManager;
+
+    /*
+    QueryDSL에 의해 생성된 Q도메인 클래스를 활용하는 코드
+    JPAQuery 객체를 사용해서 코드를 작성하는 방법
+     */
+    @Test
+    @DisplayName("JPAQuery를 활용한 QueryDSL 테스트 코드")
+    void queryDslTest() {
+        // QueryDSL을 사용하기 위해서 JPAQuery 객체를 사용 - JPAQuery는 엔티티 매니저(entityManager)를 활용해 생성
+        JPAQuery<Product> query = new JPAQuery<>(entityManager);
+        QProduct qProduct = QProduct.product;
+
+        // JPAQuery는 빌더 형식으로 쿼리 작성
+        List<Product> productList = query
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+        // List 타입으로 값을 리턴받기 위해서 fetch() 메서드 사용
+        // - 4.0.1 이전 버전의 QueryDSL을 설정한다면 list() 메서드 사용
+
+        for (Product product : productList) {
+            System.out.println("--------------------");
+            System.out.println();
+            System.out.println("Product Number" + product.getNumber());
+            System.out.println("Product Name" + product.getName());
+            System.out.println("Product Price" + product.getPrice());
+            System.out.println("Product Stock" + product.getStock());
+            System.out.println();
+            System.out.println("--------------------");
+        }
+    }
+
+    /*
+    JPAQueryFactory를 활용해 쿼리를 작성
+    JPAQuery를 사용했을 때와 달리 JPAQueryFactory는 select 절부터 작성 가능
+     */
+    @Test
+    @DisplayName("JPAQueryFactory를 활용한 QueryDSL 테스트 코드")
+    void queryDslTest2() {
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        QProduct qProduct = QProduct.product;
+
+        List<Product> productList = jpaQueryFactory
+                .selectFrom(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (Product product : productList) {
+            System.out.println("--------------------");
+            System.out.println();
+            System.out.println("Product Number" + product.getNumber());
+            System.out.println("Product Name" + product.getName());
+            System.out.println("Product Price" + product.getPrice());
+            System.out.println("Product Stock" + product.getStock());
+            System.out.println();
+            System.out.println("--------------------");
+        }
+    }
+
+    /*
+    JPAQueryFactory를 활용해 쿼리를 작성
+    JPAQuery를 사용했을 때와 달리 JPAQueryFactory는 select 절부터 작성 가능
+    - 전체 칼럼을 조회하지 않고 일부만 조회하고 싶다면 selectFrom()이 아닌
+    select()와 from() 메서드를 구분해서 사용하면 됨
+     */
+    @Test
+    @DisplayName("JPAQueryFactory를 활용한 QueryDSL 테스트 코드")
+    void queryDslTest3() {
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        QProduct qProduct = QProduct.product;
+
+        List<String> productList = jpaQueryFactory
+                .select(qProduct.name)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (String product : productList) {
+            System.out.println("--------------------");
+            System.out.println("Product Name" + product);
+            System.out.println("--------------------");
+        }
+
+        List<Tuple> tupleList = jpaQueryFactory
+                .select(qProduct.name, qProduct.price)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (Tuple product : tupleList) {
+            System.out.println("--------------------");
+            System.out.println("Product Name" + product.get(qProduct.name));
+            System.out.println("Product Price" + product.get(qProduct.price));
+            System.out.println("--------------------");
+        }
+    }
+
+
+    /*
+    JPAQueryFactory 빈을 활용한 테스트 코드
+     */
+    @Autowired
+    JPAQueryFactory jpaQueryFactory;
+
+    @Test
+    @DisplayName("JPAQueryFactory 빈을 활용한 테스트 코드")
+    void queryDslTest4() {
+        QProduct qProduct = QProduct.product;
+
+        List<String> productList = jpaQueryFactory
+                .select(qProduct.name)
+                .from(qProduct)
+                .where(qProduct.name.eq("펜"))
+                .orderBy(qProduct.price.asc())
+                .fetch();
+
+        for (String product : productList) {
+            System.out.println("--------------------");
+            System.out.println("Product Name" + product);
+            System.out.println("--------------------");
+        }
     }
 }
