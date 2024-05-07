@@ -211,4 +211,26 @@ class ProductRepositoryTest {
             System.out.println("--------------------");
         }
     }
+
+
+    /*
+    JPA Auditing 테스트
+     */
+    @Test
+    public void auditingTest() {
+        Product product = new Product();
+        product.setName("펜");
+        product.setPrice(1000);
+        product.setStock(100);
+
+        Product savedProduct = productRepository.save(product);
+
+        System.out.println("productName : " + savedProduct.getName());
+        System.out.println("createdAt : " + savedProduct.getCreatedAt());
+        /*
+        productName : 펜
+        createdAt : 2024-05-07T18:58:43.234459200
+        직접 일자를 기입하지 않았지만 정상적으로 데이터베이스에는 생성일자가 저장되었다.
+         */
+    }
 }
