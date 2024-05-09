@@ -1,0 +1,87 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
+    // QueryDSL 에서 JPAAnnotationProcessor 사용을 위한 APT 플러그인 추가
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+}
+
+group = 'com.springboot'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '11'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Swagger
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    /*
+    QueryDSL 관련 의존성 추가
+    참고 : https://github.com/jojoldu/blog-code/blob/1230834fce332e7ea89ffc67a51a647ef28778e5/spring-batch-n1/build.gradle#L34
+    querydsl-jpa: QueryDSL JPA 라이브러리
+    querydsl-apt: 쿼리 타입(Q클래스)을 생성할 때 필요한 라이브러리
+
+    apt(annotation processing tool)
+    - 어노테이션으로 정의된 코드를 기반으로 새로운 코드를 생성하는 기능
+     */
+    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-apt'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// 에러 Unable to load class ''.
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+
+// 에러 Unable to load class 'com.querydsl.apt.jpa.JPAAnnotationProcessor'.
+configurations {
+    querydsl.extendsFrom compileClasspath
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
+    }
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
