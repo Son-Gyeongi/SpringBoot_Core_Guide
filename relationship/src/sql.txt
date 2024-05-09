@@ -1,0 +1,52 @@
+실행 시 엔티티가 생성되는 SQL문 참고
+
+Hibernate:
+
+    alter table product
+       drop
+       foreign key if exists FKr9faxumx2401v6n081g0ju9u
+Hibernate:
+
+    alter table product_detail
+       drop
+       foreign key if exists FKdp0jtp38vrl8mxrqwge69bjyh
+Hibernate:
+
+    drop table if exists product
+Hibernate:
+
+    drop table if exists product_detail
+Hibernate:
+
+    create table product (
+       number bigint not null auto_increment,
+        created_at datetime(6),
+        updated_at datetime(6),
+        name varchar(255) not null,
+        price integer not null,
+        stock integer not null,
+        product_detail_id bigint,
+        primary key (number)
+    ) engine=InnoDB
+Hibernate:
+
+    create table product_detail (
+       id bigint not null auto_increment,
+        created_at datetime(6),
+        updated_at datetime(6),
+        description varchar(255),
+        product_number bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+
+    alter table product
+       add constraint FKr9faxumx2401v6n081g0ju9u
+       foreign key (product_detail_id)
+       references product_detail (id)
+Hibernate:
+
+    alter table product_detail
+       add constraint FKdp0jtp38vrl8mxrqwge69bjyh
+       foreign key (product_number)
+       references product (number)
