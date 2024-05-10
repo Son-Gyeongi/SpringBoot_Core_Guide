@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -98,5 +99,37 @@ class ProviderRepositoryTest {
         provider.setName(name);
 
         return provider; // 영속성 전이 테스트를 위해서 영속화 작업을 수행하지 않음 - repository에 save 하지 않음
+    }
+
+    @Test
+    @Transactional // 트랜잭션 유지로 영속성 컨텍스트에서 관리
+    @DisplayName("고아 객체의 제거 기능 테스트")
+    void orphanRemovalTest() {
+        Provider provider = savedProvider("새로운 공급업체");
+
+        Product product1 = savedProduct("상품1", 1000, 1000);
+        Product product2 = savedProduct("상품2", 500, 1500);
+        Product product3 = savedProduct("상품3", 750, 500);
+
+        // 연관관계 설정
+        product1.setProvider(provider);
+        product2.setProvider(provider);
+        product3.setProvider(provider);
+
+        provider.getProductList().addAll(Lists.newArrayList(product1, product2, product3));
+
+        providerRepository.saveAndFlush(provider); // saveAndFlush() : 변경 내용을 즉시 데이터베이스에 반영
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
+
+        /*
+        고아 객체를 생성하기 위해 126~127번 줄에 생성한 공급업체 엔티티를 가져온 후 첫번째로 매핑돼 있는 상품 엔티티의 연관관계를 제거
+         */
+        Provider foundProvider = providerRepository.findById(1L).get();
+        foundProvider.getProductList().remove(0);
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println); // 연관관계가 끊긴 상품의 엔티티가 제거된 것을 확인 가능
     }
 }
