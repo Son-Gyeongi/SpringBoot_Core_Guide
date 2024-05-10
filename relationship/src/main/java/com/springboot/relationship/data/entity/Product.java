@@ -34,4 +34,12 @@ public class Product extends BaseEntity {
     @ToString.Exclude // 양방향 설정이 필요할 경우에 순환참조 제거를 위해 exclude를 사용해 ToString에서 제외 설정함
     // 테이블간 양방향으로 연관관계가 설정되면 ToString을 사용할 때 순환참조 발생, 단방향으로 바꾸거나, 양방향이 필요할 경우 ToString.Exclude사용
     private ProductDetail productDetail;
+
+    // 상품 엔티티와 공급업체 엔티티의 다대일 연관관계 설정
+    // - 일반적으로 외래키를 갖는 쪽이 주인의 역할을 수행하기 때문에, 상품 엔티티가 공급업체 엔티티의 주인이다.
+    // Product 엔티티가 주인이므로 ProductRepository를 활용해서 테스트를 진행
+    @ManyToOne
+    @JoinColumn(name = "provider_id")
+    @ToString.Exclude
+    private Provider provider;
 }
