@@ -35,7 +35,7 @@ class CategoryRepositoryTest {
 
         categoryRepository.save(category);
 
-        // 테슽 코드
+        // 테스트 코드
         List<Product> products = categoryRepository.findById(1L).get().getProducts();
 
         for (Product foundProduct : products) {
