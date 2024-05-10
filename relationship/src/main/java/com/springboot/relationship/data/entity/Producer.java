@@ -33,8 +33,9 @@ public class Producer extends BaseEntity {
     @ManyToMany
     @ToString.Exclude
     private List<Product> products = new ArrayList<>();
+    // 리스트로 필드를 가지는 객체에서는 외래키를 가지지 않기 때문에 별도의 @JoinColumn은 설정하지 않아도 됨
 
-    // 연관 관계 편의 메서드
+    // 다대다 단방향 매핑 - 연관 관계 편의 메서드
     public void addProduct(Product product) {
         products.add(product);
     }
