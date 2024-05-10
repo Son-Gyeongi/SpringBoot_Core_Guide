@@ -24,7 +24,7 @@ public class Provider extends BaseEntity {
     private String name;
 
     // 다대일, 일대다 양방향 매핑
-    @OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "provider", fetch = FetchType.EAGER) // mappedBy 외래키 생성 안함
     @ToString.Exclude
     private List<Product> productList = new ArrayList<>();
 }
