@@ -1,5 +1,6 @@
 package com.springboot.valid_exception.data.dto;
 
+import com.springboot.valid_exception.config.annotation.Telephone;
 import com.springboot.valid_exception.data.group.ValidationGroup1;
 import com.springboot.valid_exception.data.group.ValidationGroup2;
 import lombok.*;
@@ -21,7 +22,8 @@ public class ValidatedRequestDto {
     String email;
 
     // 정규식 검증
-    @Pattern(regexp = "01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$")
+//    @Pattern(regexp = "01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$")
+    @Telephone
     String phoneNumber;
 
     // 최댓값/최솟값 검증
