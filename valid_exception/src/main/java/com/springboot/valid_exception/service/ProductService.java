@@ -1,7 +1,7 @@
 package com.springboot.valid_exception.service;
 
-import com.springboot.test.data.dto.ProductDto;
-import com.springboot.test.data.dto.ProductResponseDto;
+import com.springboot.valid_exception.data.dto.ProductDto;
+import com.springboot.valid_exception.data.dto.ProductResponseDto;
 
 /**
  * DAO에서 구현한 기능을 서비스 인터페이스에서 호출해 결괏값을 가져오는 작업을 수행하도록 설계
