@@ -14,11 +14,11 @@ import java.util.Map;
 
 /**
  * 스프링 부트의 예외 처리 방식 - 모든 컨트롤러의 예외를 처리
- * @RestControllerAdvice를 활용한 핸들러 클래스 생성
  *
+ * @RestControllerAdvice를 활용한 핸들러 클래스 생성
  * @RestControllerAdvice, @RControllerAdvice - 스프링에서 제공하는 어노테이션
  * @Controller, @RestController 에서 발생하는 예외를 한 곳에서 관리하고 처리할 수 있게 하는 기능을 수행
- *
+ * <p>
  * CheckedException과 UncheckedException을 구분해서 확인하면 적절한 예외 처리에 도움이 될 것이다.
  * https://docs.oracle.com/en/java/javase/11/docs/api/overview-tree.html
  */
@@ -53,5 +53,25 @@ public class CustomExceptionHandler {
         map.put("message", e.getMessage()); // "getRuntimeException 메서드 호출"
 
         return new ResponseEntity<>(map, responseHeaders, httpStatus);
+    }
+
+
+    /*
+    커스텀 예외 활용
+    ExceptionHandler 클래스에 CustomException에 대한 예외 처리 코드 추가
+
+    CustomException을 처리하는 handleException()메서드
+     */
+    @ExceptionHandler(value = CustomException.class)
+    public ResponseEntity<Map<String, String>> handleException(CustomException e, HttpServletRequest request) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        LOGGER.error("Advice 내 handleException 호출, {}, {}", request.getRequestURI(), e.getMessage());
+
+        Map<String, String> map = new HashMap<>();
+        map.put("error type", e.getHttpStatusType());
+        map.put("code", Integer.toString(e.getHttpStatusCode()));
+        map.put("message", e.getMessage());
+
+        return new ResponseEntity<>(map, responseHeaders, e.getHttpStatus());
     }
 }
