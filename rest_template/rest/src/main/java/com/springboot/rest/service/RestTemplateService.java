@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 /**
- * RestTemplate 구현하기
+ * 웹 통신 - RestTemplate 구현하기
  * 일반적으로 RestTemplate은 별도의 유틸리티 클래스로 생성하거나 서비스 또는 비즈니스 계층에 구현됨
  */
 @Service
@@ -155,8 +155,8 @@ public class RestTemplateService {
         // HttpClients는 CloseableHttpClient 인스턴스를 만들기 위한 팩터리 메서드를 포함하는 유틸리티 클래스
         // 4.3 버전 이후부터 기본으로 사용되는 HTTP 클라이언트 구현체
         CloseableHttpClient httpClient = HttpClients.custom()
-                .setMaxConnTotal(500)
-                .setMaxConnPerRoute(500)
+                .setMaxConnTotal(500) // 클라이언트는 최대 500개의 동시 연결을 유지 가능
+                .setMaxConnPerRoute(500) // 한 호스트에 대해 열 수 있는 최대 연결 수를 의미, 특정 호스트로의 과도한 연결 요청을 방지하고, 리소스를 공평하게 분배하는 데 도움
                 .build();
 
         factory.setHttpClient(httpClient);

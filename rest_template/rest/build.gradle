@@ -45,6 +45,10 @@ dependencies {
      */
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
+    // WebClient를 사용하기 위해서 WebFlux 모듈에 대한 의존성 추가
+    // WebFlux는 클라이언트와 서버 간 리액티브 애플리케이션 개발을 지원하기 위해 스프링 프레임워크5에서 새롭게 추가된 모듈
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
