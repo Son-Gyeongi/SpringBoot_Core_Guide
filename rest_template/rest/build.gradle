@@ -28,6 +28,23 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Swagger
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    /*
+    RestTemplate은 기본적으로 커넥션 풀을 지원하지 않음
+    - 매번 호출할 때마다 포트를 열어 커넥션을 생성하게 되는데,
+        TIME-WAIT 상태가 된 소켓을 다시 사용하려고 접근한다면 재사용하지 못함
+    - 이를 방지하기 위해서는 커넥션 풀 기능을 활성화해서 재사용할 수 있게 하는 것이 좋음
+    - 이 기능을 활성화하는 가장 대표적인 방법은 아파치에서 제공하는 HttpClient로 대체해서 사용하는 방식임
+        HttpClient 의존성을 추가하면 RestTemplate의 설정을 더욱 쉽게 추가하고 변경할 수 있음
+     */
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
 }
 
 tasks.named('test') {
