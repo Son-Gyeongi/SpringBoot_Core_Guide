@@ -39,7 +39,8 @@ dependencies {
 
     // 인증과 인가 코드를 작성하기 위해 security 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'io.jsonwebtoken:jjwt-api:0.9.1'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 }
 
 tasks.named('test') {
