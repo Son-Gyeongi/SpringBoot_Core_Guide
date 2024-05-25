@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * User 엔티티 - 사용자 정보를 담는 엔티티
+ * User 엔티티 - 사용자 정보를 담는 엔티티 (인증에 사용되는 UserDetails 인터페이스의 구현체 클래스 User 엔티티)
  * User 엔티티는 UserDetails 인터페이스를 구현하고 있다.
  * User 엔티티는 앞으로 토큰을 생성할 때 토큰의 정보로 사용될 정보와 권한 정보를 갖게 된다.
  *
