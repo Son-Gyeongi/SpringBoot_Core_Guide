@@ -1,8 +1,8 @@
 package com.springboot.security.config.security;
 
-import io.swagger.models.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -56,12 +56,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/sign-api/sign-in", "/sign-api/sign-up", "/sign-api/exception").permitAll() // 해당 경로에 대해서 모두 허용
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll() // /product 로 시작하는 경로의 GET 요청은 모두 허용
+                // import org.springframework.http.HttpMethod;
 
                 .antMatchers("**exception**").permitAll() // exception 단어가 들어간 경로는 모두 허용
 
                 .anyRequest().hasRole("ADMIN") // 기타 요청은 인증된 권한을 가진 사용자에게 허용
 
                 /*
+                인증과 인가 과정의 예외 상황
                 각 메서드는 CustomAccessDeniedHandler와 CustomAuthenticationEntryPoint로 예외를 전달한다.
                  */
                 .and()
